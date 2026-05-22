@@ -31,6 +31,7 @@ export const uploadImage = asyncHandler(async (req, res, next) => {
 export const signVideoUpload = asyncHandler(async (req, res, next) => {
   try {
     const data = await signVideoUploadService(req.body.folder);
+    console.log('upload-video controller:', data);
 
     res.status(200).json({
       success: true,

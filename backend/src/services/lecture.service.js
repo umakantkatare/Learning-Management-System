@@ -14,14 +14,15 @@ import {
   addLectureToSectionRepo,
   removeLectureFromSectionRepo,
 } from "../repositories/section.repository.js";
-import  ApiError  from "../utils/error.util.js";
+import ApiError from "../utils/error.util.js";
 
 /**
  * Create Lecture
  */
 export const createLectureService = async (courseId, payload, user) => {
   const course = await getCourseByIdRepo(courseId);
-
+  console.log("lecture body:", payload);
+  console.log("lecture user:", user);
   if (!course) {
     throw new ApiError("Course not found", 404);
   }
@@ -39,8 +40,10 @@ export const createLectureService = async (courseId, payload, user) => {
     throw new ApiError("Unauthorized access", 403);
   }
 
-  if (!payload.title) {
-    throw new ApiError("Lecture title are required", 400);
+  const lectureTitle = payload.lectures?.[0]?.title;
+
+  if (!lectureTitle) {
+    throw new ApiError("Lecture title is required", 400);
   }
   if (!payload.sectionId) {
     throw new ApiError("sectionId are required", 400);
@@ -54,12 +57,14 @@ export const createLectureService = async (courseId, payload, user) => {
 
   const totalLectures = section.lectures.length;
 
+  const lectureDescription = payload.lectures?.[0]?.description;
+
   const lecture = await createLectureRepo({
-    title: payload.title,
-    description: payload.description,
+    title: lectureTitle,
+    description: lectureDescription,
     section: payload.sectionId,
     course: courseId,
-    video: payload.video,
+    video: payload.lectures[0].video,
     resources: payload.resources || [],
     isPreviewFree: payload.isPreviewFree || false,
     order: totalLectures + 1,
@@ -102,7 +107,7 @@ export const updateLectureService = async (lectureId, payload, user) => {
 
   const course = await getCourseByIdRepo(lecture.course._id);
 
-   const instructorId = course.instructor?._id || course.instructor;
+  const instructorId = course.instructor?._id || course.instructor;
 
   if (!instructorId && user.role !== "admin") {
     throw new ApiError("Course instructor not assigned", 400);
@@ -130,7 +135,7 @@ export const deleteLectureService = async (lectureId, user) => {
 
   const course = await getCourseByIdRepo(lecture.course._id);
 
-   const instructorId = course.instructor?._id || course.instructor;
+  const instructorId = course.instructor?._id || course.instructor;
 
   if (!instructorId && user.role !== "admin") {
     throw new ApiError("Course instructor not assigned", 400);
@@ -162,7 +167,7 @@ export const reorderLecturesService = async (sectionId, items, user) => {
 
   const course = await getCourseByIdRepo(section.course);
 
-   const instructorId = course.instructor?._id || course.instructor;
+  const instructorId = course.instructor?._id || course.instructor;
 
   if (!instructorId && user.role !== "admin") {
     throw new ApiError("Course instructor not assigned", 400);
@@ -224,7 +229,7 @@ export const unpublishLectureService = async (lectureId, user) => {
 
   const course = await getCourseByIdRepo(lecture.course._id);
 
-   const instructorId = course.instructor?._id || course.instructor;
+  const instructorId = course.instructor?._id || course.instructor;
 
   if (!instructorId && user.role !== "admin") {
     throw new ApiError("Course instructor not assigned", 400);

@@ -29,15 +29,16 @@ import { Switch } from "@/components/ui/switch";
 import { createLecture } from "@/api/lectureApi";
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { uploadVideo } from "@/api/uploadVideo";
 
 export default function AddLecturePage() {
   const { courseId } = useParams();
   const { currentSection } = useSelector((state) => state?.course);
   // console.log('this is a add lecture page:', currentSection?.data?._id);
   const sectionId = currentSection?.data?._id;
-  const videoInputRef = useRef(null);
+  const videoInputRef = useRef({});
 
-  const [videoPreview, setVideoPreview] = useState("");
+  const [videoPreview, setVideoPreview] = useState({});
 
   const { register, control, watch, setValue, handleSubmit } = useForm({
     defaultValues: {
@@ -75,14 +76,60 @@ export default function AddLecturePage() {
     name: "lectures",
   });
 
-  const onSubmit = async (data) => {
-    const payload = {
-      ...data,
-      sectionId,
-    };
+  // const onSubmit = async (data) => {
+  //   const payload = {
+  //     ...data,
+  //     sectionId,
+  //   };
 
-    const response = await createLecture(courseId, payload);
-    console.log(response);
+  //   const response = await createLecture(courseId, payload);
+  //   console.log(response);
+  // };
+
+  const onSubmit = async (data) => {
+    try {
+      const updatedLectures = await Promise.all(
+        data.lectures.map(async (lecture) => {
+          const file = lecture.video.file;
+
+          // no file uploaded
+          if (!file) return lecture;
+
+          // upload video
+
+          const uploadResult = await uploadVideo(file);
+
+          if (!uploadResult.success) {
+            throw new Error(uploadResult.error);
+          }
+
+          // replace local file with cloudinary data
+
+          return {
+            ...lecture,
+
+            video: {
+              public_id: uploadResult.public_id,
+              url: uploadResult.url,
+              duration: uploadResult.duration,
+            },
+          };
+        }),
+      );
+
+      // final payload
+
+      const payload = {
+        lectures: updatedLectures,
+        sectionId,
+      };
+
+      const response = await createLecture(courseId, payload);
+
+      console.log(response);
+    } catch (error) {
+      console.log(error.message);
+    }
   };
 
   return (
@@ -187,6 +234,7 @@ export default function AddLecturePage() {
                       <Input
                         placeholder="Introduction to React"
                         {...register(`lectures.${index}.title`)}
+                        // {...register(`title`)}
                         className="bg-zinc-900 border-zinc-700 text-white h-12 placeholder:text-zinc-500"
                       />
                     </div>
@@ -201,8 +249,7 @@ export default function AddLecturePage() {
                       <Textarea
                         rows={5}
                         placeholder="Write lecture summary..."
-                        // {...register(`lectures.${index}.description`)}
-                        {...register(`title`)}
+                        {...register(`lectures.${index}.description`)}
                         className="bg-zinc-900 border-zinc-700 text-white placeholder:text-zinc-500"
                       />
                     </div>
@@ -213,7 +260,7 @@ export default function AddLecturePage() {
                       <Label className="text-zinc-300">Upload Video</Label>
 
                       <div
-                        onClick={() => videoInputRef.current?.click()}
+                        onClick={() => videoInputRef.current[index]?.click()}
                         className="
                           border-2 border-dashed border-zinc-700
                           rounded-3xl
@@ -240,7 +287,7 @@ export default function AddLecturePage() {
                         </p>
 
                         <Input
-                          ref={videoInputRef}
+                          ref={(el) => (videoInputRef.current[index] = el)}
                           type="file"
                           accept="video/*"
                           className="hidden"
@@ -253,11 +300,14 @@ export default function AddLecturePage() {
 
                             const preview = URL.createObjectURL(file);
 
-                            setVideoPreview(preview);
+                            setVideoPreview((prev) => ({
+                              ...prev,
+                              [index]: preview,
+                            }));
                           }}
                         />
 
-                        {videoPreview && (
+                        {videoPreview[index] && (
                           <video
                             controls
                             className="
@@ -269,7 +319,7 @@ export default function AddLecturePage() {
                               border-zinc-700
                             "
                           >
-                            <source src={videoPreview} />
+                            <source src={videoPreview[index]} />
                           </video>
                         )}
                       </div>

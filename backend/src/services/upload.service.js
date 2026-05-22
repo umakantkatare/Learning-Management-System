@@ -43,6 +43,7 @@ export const signVideoUploadService = async (folder = "lms/course/videos") => {
   const timestamp = Math.round(Date.now() / 1000);
 
   const paramsToSign = `folder=${folder}&timestamp=${timestamp}${process.env.CLOUDINARY_API_SECRET}`;
+  console.log('upload-video service:', paramsToSign);
 
   const signature = crypto
     .createHash("sha1")
