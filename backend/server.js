@@ -1,7 +1,5 @@
-
 import app from "./src/app.js";
 import dbConnected from "./src/configs/db.config.js";
-
 import logger from "./src/utils/logger.util.js";
 
 const PORT = process.env.PORT || 5000;

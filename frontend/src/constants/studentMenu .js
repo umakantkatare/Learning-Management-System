@@ -18,17 +18,17 @@ export const menuByRole = {
     {
       name: "Dashboard",
       icon: Home,
-      path: "/instructor",
+      path: "/profile",
     },
     {
       name: "Create Course",
       icon: PlusCircle,
-      path: "/create-course",
+      path: "/create-course/basics",
     },
     {
       name: "My Courses",
       icon: BookOpen,
-      path: "/instructor/courses",
+      path: "/instructor/my-courses",
     },
   ],
 
@@ -51,7 +51,7 @@ export const menuByRole = {
     {
       name: "Manage Courses",
       icon: Shield,
-      path: "/admin/courses",
+      path: "/instructor/mycourses",
     },
   ],
 };

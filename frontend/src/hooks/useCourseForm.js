@@ -146,19 +146,9 @@ export default function useCourseForm() {
       if (courseId) {
         reset();
         setThumbnailPreview("");
-        console.log('course-navigation:')
         navigate(`/create-course/sections/${courseId}`);
       }
-      // if (result?.success) {
-      //   toast.success("Course created successfully!");
 
-      //   reset();
-
-      //   setThumbnailPreview("");
-
-      //   const courseId =  result?.data?._id
-      //   navigate(`/section/course/${courseId}`);
-      // }
     } catch (error) {
       console.log("CREATE COURSE ERROR:", error);
 

@@ -157,8 +157,8 @@ export const getMeService = async (userId) => {
  */
 export const changePasswordService = async (userId, body) => {
   const { oldPassword, newPassword } = body;
-console.log('userId:', userId);
-console.log('body:', body);
+  console.log("userId:", userId);
+  console.log("body:", body);
   const user = await findUserByIdRepo(userId, true);
   if (!user) {
     throw new ErrorHandler("User not found", 404);
@@ -233,7 +233,7 @@ export const forgotPasswordService = async (email) => {
   const resetToken = crypto.randomBytes(32).toString("hex");
 
   const expireTime = Date.now() + 15 * 60 * 1000;
-  const hashedResetToken = hashToken(resetToken)
+  const hashedResetToken = hashToken(resetToken);
   await saveResetTokenRepo(user._id, hashedResetToken, expireTime);
 
   const resetUrl = `${process.env.CLIENT_URL}/reset-password/${resetToken}`;

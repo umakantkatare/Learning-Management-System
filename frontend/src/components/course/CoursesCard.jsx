@@ -22,12 +22,6 @@ export default function CoursesCard({ course }) {
 
         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
 
-        {course?.live && (
-          <span className="absolute top-3 left-3 px-3 py-1 rounded-full text-xs font-medium bg-red-500 text-white">
-            Live
-          </span>
-        )}
-
         <button className="absolute bottom-3 right-3 w-10 h-10 rounded-full bg-white/10 backdrop-blur flex items-center justify-center border border-white/20 hover:bg-orange-500 transition">
           <PlayCircle size={18} />
         </button>
@@ -43,11 +37,11 @@ export default function CoursesCard({ course }) {
 
         {/* pricing */}
         <div className="mt-4 flex items-end gap-3">
-          <span className="text-2xl font-bold">₹{course?.price}</span>
+          <span className="text-2xl font-bold">₹{course?.discountPrice}</span>
 
-          {/* <span className="text-sm text-zinc-500 line-through">
-            ₹{course?.oldPrice}
-          </span> */}
+          <span className="text-sm text-zinc-500 line-through">
+            ₹{course?.price}
+          </span>
         </div>
 
         {/* button */}

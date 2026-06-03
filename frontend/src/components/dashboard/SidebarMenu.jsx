@@ -4,11 +4,9 @@ import { menuByRole } from "@/constants/studentMenu ";
 import { useDispatch } from "react-redux";
 import { logoutThunk } from "@/features/auth/authThunk";
 import useAuth from "@/hooks/useAuth";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 export default function SidebarMenu() {
-  const location = useLocation();
-  console.log("user location:", location.pathname);
   const dispatch = useDispatch();
   async function onLogout() {
     await dispatch(logoutThunk());
@@ -18,23 +16,23 @@ export default function SidebarMenu() {
 
   const userRole = user?.role;
   const menu = menuByRole[userRole] || [];
+
   return (
     <>
       <nav className="space-y-2 flex-1">
-        {menu.map((item, i) => {
+        {menu.map((item) => {
           const Icon = item.icon;
-          const isActive = location.pathname === item.path;
-          console.log("active path:", isActive);
-
           return (
             <NavLink
-              to={item?.path}
-              key={i}
-              className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm transition ${
-                isActive
-                  ? "bg-orange-600 text-white"
-                  : "text-zinc-400 hover:bg-zinc-900"
-              }`}
+              key={item.path}
+              to={item.path}
+              className={({ isActive }) =>
+                `w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm transition ${
+                  isActive
+                    ? "bg-orange-600 text-white"
+                    : "text-zinc-400 hover:bg-zinc-900"
+                }`
+              }
             >
               <Icon className="w-4 h-4" />
               {item.name}

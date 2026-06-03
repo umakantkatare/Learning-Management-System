@@ -1,14 +1,14 @@
 import { useDispatch, useSelector } from "react-redux";
 import CoursesCard from "./CoursesCard";
-import { getAllCoursesThunk } from "@/features/course/courseThunk";
+import { getPublishedCoursesThunk } from "@/features/course/courseThunk";
 import { useEffect } from "react";
 
 export default function CoursesGrid() {
   const dispatch = useDispatch();
-  const { courses } = useSelector((state) => state.course);
-  console.log("courses:", courses);
+  const { publishedCourses } = useSelector((state) => state.course);
+  console.log("courses:", publishedCourses);
   async function loadCourses() {
-    await dispatch(getAllCoursesThunk());
+    await dispatch(getPublishedCoursesThunk());
   }
 
   useEffect(() => {
@@ -17,7 +17,7 @@ export default function CoursesGrid() {
   return (
     <section className="bg-black text-white pb-20 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {courses.map((course) => (
+        {publishedCourses.map((course) => (
           <CoursesCard key={course._id} course={course} />
         ))}
       </div>

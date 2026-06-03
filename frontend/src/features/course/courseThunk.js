@@ -58,6 +58,7 @@ export const getPublishedCoursesThunk = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const res = await getPublishedCourses();
+      console.log('published course:', res);
       return res.data;
     } catch (error) {
       return rejectWithValue(

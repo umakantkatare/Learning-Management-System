@@ -10,6 +10,7 @@ import {
   updateSectionRepo,
   deleteSectionRepo,
   reorderSectionsRepo,
+  addLectureToSectionRepo,
 } from "../repositories/section.repository.js";
 import ApiError from "../utils/error.util.js";
 

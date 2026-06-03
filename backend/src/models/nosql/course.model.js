@@ -82,7 +82,7 @@ const courseSchema = new mongoose.Schema(
 
     status: {
       type: String,
-      enum: ["draft", "published", "unpublished"],
+      enum: ["draft", "published"],
       default: "draft",
     },
 
@@ -132,7 +132,7 @@ const courseSchema = new mongoose.Schema(
 
     requirements: [String],
 
-    learningOutcomes: [String],
+    learningOutcomes: [],
 
     isDeleted: {
       type: Boolean,

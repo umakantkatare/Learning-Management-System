@@ -16,6 +16,10 @@ import CreateCoursePage from "@/pages/course/CreateCourse";
 import CreateSectionPage from "@/pages/course/CreateSectionPage";
 import AddLecturePage from "@/pages/course/AddLecturePage";
 import CourseCurriculum from "@/pages/course/CourseCurriculam";
+import CurriculumPage from "@/components/course/CurriculumList";
+// import MyCourses from "@/components/course/MyCourses";
+import MyCoursePage from "@/pages/instructor/MyCoursePage";
+import ManageCoursePage from "@/pages/course/ManageCoursePage";
 
 function AppRoutes() {
   const dispatch = useDispatch();
@@ -36,7 +40,11 @@ function AppRoutes() {
       <Route path="/reset-password/:token" element={<ResetPassword />} />
       <Route path="/courses" element={<Course />} />
       <Route path="/course/:slug" element={<CourseDetails />} />
-      <Route element={<ProtectedRoute allowedRoles={["student", "admin"]} />}>
+      <Route
+        element={
+          <ProtectedRoute allowedRoles={["student", "instructor", "admin"]} />
+        }
+      >
         <Route path="/profile" element={<StudentDashboard />} />
       </Route>
       <Route
@@ -44,11 +52,21 @@ function AppRoutes() {
       >
         <Route path="/create-course/basics" element={<CreateCoursePage />} />
       </Route>
-      <Route path="/learn" element={<WatchCourse />} />
-      <Route path="/create-course/sections/:courseId" element={<CreateSectionPage />} />
-      <Route path="/create-course/lectures/:courseId" element={<AddLecturePage />} />
-      <Route path="/course/curriculam" element={<CourseCurriculum />} />
+      <Route path="/learn/:id" element={<WatchCourse />} />
+      <Route
+        path="/create-course/sections/:courseId"
+        element={<CreateSectionPage />}
+      />
+      <Route
+        path="/create-course/lectures/:courseId"
+        element={<AddLecturePage />}
+      />
+      <Route path="/course/curriculum" element={<CurriculumPage />} />
+      <Route path="/create-course/curriculum" element={<CourseCurriculum />} />
+      <Route path="/instructor/my-courses" element={<MyCoursePage />} />
+      <Route path="/instructor/managecourse/:courseId" element={<ManageCoursePage />} />
     </Routes>
+
   );
 }
 

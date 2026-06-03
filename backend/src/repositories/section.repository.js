@@ -1,6 +1,7 @@
 // repositories/section.repo.js
 
 import sectionModel from "../models/nosql/section.model.js";
+import lectureModel from './../models/nosql/lecture.model.js';
 
 /**
  * Create Section
@@ -66,11 +67,24 @@ export const reorderSectionsRepo = async (items = []) => {
  * Add Lecture In Section
  */
 export const addLectureToSectionRepo = async (sectionId, lectureId) => {
+  await sectionModel.findByIdAndUpdate(sectionId, {
+    $push: { lectures: lectureId },
+  });
+
+  const lectures = await lectureModel.find({
+    section: sectionId,
+  });
+
+  const totalDuration = lectures.reduce(
+    (acc, lecture) => acc + (lecture.video?.duration || 0),
+    0,
+  );
+
   return await sectionModel.findByIdAndUpdate(
     sectionId,
     {
-      $push: { lectures: lectureId },
-      $inc: { totalLectures: 1 },
+      totalLectures: lectures.length,
+      totalDuration,
     },
     { new: true },
   );

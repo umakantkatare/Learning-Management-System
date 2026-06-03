@@ -41,7 +41,7 @@ const sectionSchema = new mongoose.Schema(
 
     isPublished: {
       type: Boolean,
-      default: false,
+      default: true,
     },
   },
   {
@@ -52,6 +52,7 @@ const sectionSchema = new mongoose.Schema(
 // Helpful indexes
 sectionSchema.index({ course: 1 });
 sectionSchema.index({ course: 1, order: 1 });
+
 
 const sectionModel = mongoose.model("Section", sectionSchema);
 

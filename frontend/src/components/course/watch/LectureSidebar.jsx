@@ -20,16 +20,15 @@ export default function LectureSidebar({
                 onClick={() =>
                   setCurrentLecture({
                     ...lecture,
-                    videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4",
                   })
                 }
                 className={`p-2 rounded-md text-sm cursor-pointer transition ${
                   currentLecture._id === lecture._id
-                    ? "bg-purple-600 text-white"
+                    ? "bg-orange-500 text-white"
                     : "hover:bg-zinc-800"
                 }`}
               >
-                {lecture.title}
+                <span>{lecture.title}</span>
               </div>
             ))}
           </div>

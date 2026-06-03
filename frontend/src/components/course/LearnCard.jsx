@@ -2,14 +2,22 @@ import { Card, CardContent } from "@/components/ui/card";
 import { CheckCircle2 } from "lucide-react";
 
 export default function LearnCard({ course }) {
-  const learnItems = course?.learnPoints || [
-    "Build full MERN stack applications",
-    "Create REST APIs with Express.js",
-    "Use MongoDB with Mongoose",
-    "Implement JWT Authentication",
-    "Deploy production-ready apps",
-    "Follow industry project structure",
-  ];
+  const dynamicItems = Array.isArray(course?.learningOutcomes)
+    ? JSON.parse(course.learningOutcomes[0]).filter(
+        (item) => item && item !== "[]" && item.trim() !== "",
+      )
+    : [];
+  const learnItems =
+    dynamicItems?.length > 0
+      ? dynamicItems
+      : [
+          "Build full MERN stack applications",
+          "Create REST APIs with Express.js",
+          "Use MongoDB with Mongoose",
+          "Implement JWT Authentication",
+          "Deploy production-ready apps",
+          "Follow industry project structure",
+        ];
 
   return (
     <Card className="rounded-2xl shadow-sm border-0 sticky top-24">
@@ -24,15 +32,15 @@ export default function LearnCard({ course }) {
         </div>
 
         {/* List */}
-        <div className="space-y-4">
+        <ul className="space-y-4">
           {learnItems.map((item, index) => (
-            <div key={index} className="flex items-start gap-3">
+            <li key={index} className="flex items-start gap-3">
               <CheckCircle2 className="w-5 h-5 text-primary mt-0.5 shrink-0" />
 
-              <p className="text-sm text-slate-700 leading-6">{item}</p>
-            </div>
+              <span className="text-sm text-slate-700 leading-6">{item}</span>
+            </li>
           ))}
-        </div>
+        </ul>
       </CardContent>
     </Card>
   );

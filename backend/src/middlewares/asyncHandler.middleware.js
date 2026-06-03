@@ -1,5 +1,3 @@
-// src/middlewares/asyncHandler.js
-
 const asyncHandler =
   (controller) =>
   (req, res, next) => {

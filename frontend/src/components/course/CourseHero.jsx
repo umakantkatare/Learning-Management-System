@@ -46,9 +46,9 @@ export default function CourseHero({ course }) {
             <span>{course?.level}</span>
           </div>
 
-          {/* <p className="text-sm text-slate-400">
-            Created by {course?.instructor}
-          </p> */}
+          <p className="text-sm text-slate-400">
+            Created by {course?.instructor?.name}
+          </p>
         </div>
 
         {/* Right Empty Space for Purchase Card Alignment */}

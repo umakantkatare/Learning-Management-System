@@ -11,11 +11,10 @@ import {
   Video,
   FileText,
   Clock3,
-  PlayCircle,
   GripVertical,
 } from "lucide-react";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, } from "@/components/ui/card";
 
 import { Input } from "@/components/ui/input";
 
@@ -27,20 +26,20 @@ import { Label } from "@/components/ui/label";
 
 import { Switch } from "@/components/ui/switch";
 import { createLecture } from "@/api/lectureApi";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { uploadVideo } from "@/api/uploadVideo";
 
 export default function AddLecturePage() {
+  const navigate = useNavigate()
   const { courseId } = useParams();
   const { currentSection } = useSelector((state) => state?.course);
-  // console.log('this is a add lecture page:', currentSection?.data?._id);
   const sectionId = currentSection?.data?._id;
   const videoInputRef = useRef({});
 
   const [videoPreview, setVideoPreview] = useState({});
 
-  const { register, control, watch, setValue, handleSubmit } = useForm({
+  const { register, control, watch, setValue, handleSubmit,reset } = useForm({
     defaultValues: {
       lectures: [
         {
@@ -76,16 +75,6 @@ export default function AddLecturePage() {
     name: "lectures",
   });
 
-  // const onSubmit = async (data) => {
-  //   const payload = {
-  //     ...data,
-  //     sectionId,
-  //   };
-
-  //   const response = await createLecture(courseId, payload);
-  //   console.log(response);
-  // };
-
   const onSubmit = async (data) => {
     try {
       const updatedLectures = await Promise.all(
@@ -102,8 +91,9 @@ export default function AddLecturePage() {
           if (!uploadResult.success) {
             throw new Error(uploadResult.error);
           }
+          reset()
+          navigate(`/`)
 
-          // replace local file with cloudinary data
 
           return {
             ...lecture,
@@ -322,86 +312,6 @@ export default function AddLecturePage() {
                             <source src={videoPreview[index]} />
                           </video>
                         )}
-                      </div>
-                    </div>
-
-                    {/* GRID */}
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                      {/* ORDER */}
-
-                      <div className="space-y-2">
-                        <Label className="text-zinc-300">Lecture Order</Label>
-
-                        <Input
-                          type="number"
-                          placeholder="1"
-                          {...register(`lectures.${index}.order`, {
-                            valueAsNumber: true,
-                          })}
-                          className="bg-zinc-900 border-zinc-700 text-white h-12"
-                        />
-                      </div>
-
-                      {/* DURATION */}
-
-                      <div className="space-y-2">
-                        <Label className="text-zinc-300">Video Duration</Label>
-
-                        <div className="relative">
-                          <Clock3 className="absolute left-3 top-3.5 w-4 h-4 text-zinc-500" />
-
-                          <Input
-                            type="number"
-                            placeholder="30"
-                            {...register(`lectures.${index}.video.duration`, {
-                              valueAsNumber: true,
-                            })}
-                            className="bg-zinc-900 border-zinc-700 text-white h-12 pl-10"
-                          />
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* TOGGLES */}
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                      {/* PREVIEW */}
-
-                      <div className="flex items-center justify-between bg-zinc-900 border border-zinc-800 rounded-2xl p-5">
-                        <div>
-                          <h3 className="font-medium">Free Preview</h3>
-
-                          <p className="text-sm text-zinc-500 mt-1">
-                            Students can watch without enrollment.
-                          </p>
-                        </div>
-
-                        <Switch
-                          checked={isPreviewFree}
-                          onCheckedChange={(value) =>
-                            setValue(`lectures.${index}.isPreviewFree`, value)
-                          }
-                        />
-                      </div>
-
-                      {/* PUBLISH */}
-
-                      <div className="flex items-center justify-between bg-zinc-900 border border-zinc-800 rounded-2xl p-5">
-                        <div>
-                          <h3 className="font-medium">Publish Lecture</h3>
-
-                          <p className="text-sm text-zinc-500 mt-1">
-                            Make lecture visible to students.
-                          </p>
-                        </div>
-
-                        <Switch
-                          checked={isPublished}
-                          onCheckedChange={(value) =>
-                            setValue(`lectures.${index}.isPublished`, value)
-                          }
-                        />
                       </div>
                     </div>
 

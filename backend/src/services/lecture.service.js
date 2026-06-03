@@ -40,7 +40,8 @@ export const createLectureService = async (courseId, payload, user) => {
     throw new ApiError("Unauthorized access", 403);
   }
 
-  const lectureTitle = payload.lectures?.[0]?.title;
+  const lectureTitle = payload.lectures?.[0]?.title || payload?.title;
+  console.log("lecture title:", lectureTitle);
 
   if (!lectureTitle) {
     throw new ApiError("Lecture title is required", 400);
@@ -57,14 +58,18 @@ export const createLectureService = async (courseId, payload, user) => {
 
   const totalLectures = section.lectures.length;
 
-  const lectureDescription = payload.lectures?.[0]?.description;
+  const lectureDescription =
+    payload?.lectures?.[0]?.description || payload?.description;
+
+  const lectureVideo = payload?.lectures?.[0]?.video || payload?.video;
+  console.log("lectureVideo", lectureVideo);
 
   const lecture = await createLectureRepo({
     title: lectureTitle,
     description: lectureDescription,
     section: payload.sectionId,
     course: courseId,
-    video: payload.lectures[0].video,
+    video: lectureVideo,
     resources: payload.resources || [],
     isPreviewFree: payload.isPreviewFree || false,
     order: totalLectures + 1,

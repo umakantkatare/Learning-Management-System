@@ -19,9 +19,9 @@ import { useDispatch } from "react-redux";
 import { setCurrentSection } from "@/features/course/courseSlice";
 
 export default function CreateSectionPage() {
-  const dispatch = useDispatch()
-  const {courseId} = useParams()
-  const navigate = useNavigate()
+  const dispatch = useDispatch();
+  const { courseId } = useParams();
+  const navigate = useNavigate();
   const { control, register, watch, setValue, handleSubmit } = useForm({
     defaultValues: {
       sections: [
@@ -45,11 +45,11 @@ export default function CreateSectionPage() {
     try {
       const result = await addSection(courseId, data);
 
-     const getSectionId =  await dispatch(setCurrentSection(result))
-     console.log("get sectionId:", result?.data);
-     console.log("Success! Data saved:", result);
-     
-      navigate(`/create-course/lectures/${courseId}`)
+      const getSectionId = await dispatch(setCurrentSection(result));
+      console.log("get sectionId:", result?.data);
+      console.log("Success! Data saved:", result);
+
+      navigate(`/create-course/lectures/${courseId}`);
     } catch (error) {
       if (error.response) {
         console.error("Backend Error:", error.response.data);
@@ -164,112 +164,10 @@ export default function CreateSectionPage() {
                       <Input
                         placeholder="Introduction to MERN Stack"
                         // {...register(`sections.${index}.title`)}
-                        {...register('title')}
+                        {...register("title")}
                         className="bg-zinc-900 border-zinc-700 text-white placeholder:text-zinc-500 h-12"
                       />
                     </div>
-
-                    {/* GRID */}
-
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-                      {/* ORDER */}
-
-                      <div className="space-y-2">
-                        <Label className="text-zinc-300">Section Order</Label>
-
-                        <Input
-                          type="number"
-                          placeholder="1"
-                          {...register(`sections.${index}.order`, {
-                            valueAsNumber: true,
-                          })}
-                          className="bg-zinc-900 border-zinc-700 text-white h-12"
-                        />
-                      </div>
-
-                      {/* TOTAL LECTURES */}
-
-                      <div className="space-y-2">
-                        <Label className="text-zinc-300">Total Lectures</Label>
-
-                        <div className="relative">
-                          <BookOpen className="absolute left-3 top-3.5 w-4 h-4 text-zinc-500" />
-
-                          <Input
-                            type="number"
-                            placeholder="0"
-                            {...register(`sections.${index}.totalLectures`, {
-                              valueAsNumber: true,
-                            })}
-                            className="bg-zinc-900 border-zinc-700 text-white h-12 pl-10"
-                          />
-                        </div>
-                      </div>
-
-                      {/* TOTAL DURATION */}
-
-                      <div className="space-y-2">
-                        <Label className="text-zinc-300">Total Duration</Label>
-
-                        <div className="relative">
-                          <Clock3 className="absolute left-3 top-3.5 w-4 h-4 text-zinc-500" />
-
-                          <Input
-                            type="number"
-                            placeholder="60"
-                            {...register(`sections.${index}.totalDuration`, {
-                              valueAsNumber: true,
-                            })}
-                            className="bg-zinc-900 border-zinc-700 text-white h-12 pl-10"
-                          />
-                        </div>
-
-                        <p className="text-xs text-zinc-500">
-                          Duration in minutes
-                        </p>
-                      </div>
-                    </div>
-
-                    {/* PUBLISH TOGGLE */}
-
-                    <div className="flex items-center justify-between bg-zinc-900 border border-zinc-800 rounded-2xl p-5">
-                      <div>
-                        <h3 className="font-medium">Publish Section</h3>
-
-                        <p className="text-sm text-zinc-500 mt-1">
-                          Students can access this section after publishing.
-                        </p>
-                      </div>
-
-                      <Switch
-                        checked={isPublished}
-                        onCheckedChange={(value) =>
-                          setValue(`sections.${index}.isPublished`, value)
-                        }
-                      />
-                    </div>
-
-                    {/* LECTURE PLACEHOLDER */}
-
-                    {/* <div className="border border-dashed border-zinc-700 rounded-2xl p-6 bg-zinc-900/40">
-                      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-                        <div>
-                          <h3 className="font-semibold text-lg">Lectures</h3>
-
-                          <p className="text-sm text-zinc-500 mt-1">
-                            Add video lectures inside this section.
-                          </p>
-                        </div>
-
-                        <Button
-                          type="button"
-                          className="bg-orange-500 hover:bg-orange-600 text-white"
-                        >
-                          <Plus className="w-4 h-4 mr-2" />
-                          Add Lecture
-                        </Button>
-                      </div>
-                    </div> */}
                   </CardContent>
                 </Card>
               </motion.div>
@@ -330,3 +228,57 @@ export default function CreateSectionPage() {
     </div>
   );
 }
+
+//  const dispatch = useDispatch()
+//   const {courseId} = useParams()
+//   const navigate = useNavigate()
+//   const { control, register, watch, setValue, handleSubmit } = useForm({
+//     defaultValues: {
+//       sections: [
+//         {
+//           title: "",
+//           order: 1,
+//           isPublished: false,
+//           totalLectures: 0,
+//           totalDuration: 0,
+//         },
+//       ],
+//     },
+//   });
+
+//   const { fields, append, remove } = useFieldArray({
+//     control,
+//     name: "sections",
+//   });
+
+//   const onSubmit = async (data) => {
+//     try {
+//       const result = await addSection(courseId, data);
+
+//      const getSectionId =  await dispatch(setCurrentSection(result))
+//      console.log("get sectionId:", result?.data);
+//      console.log("Success! Data saved:", result);
+
+//       navigate(`/create-course/lectures/${courseId}`)
+//     } catch (error) {
+//       if (error.response) {
+//         console.error("Backend Error:", error.response.data);
+//         alert(`Error: ${error.success.message || "Failed to save"}`);
+//       } else {
+//         console.error("Network Error:", error.message);
+//         alert("Network issue! Please check your internet.");
+//       }
+//     }
+//     console.log(data);
+//   };
+
+//  <div className="space-y-2">
+//     <Label className="text-zinc-300">Section Title</Label>
+
+//     <Input
+//       placeholder="Introduction to MERN Stack"
+//       {...register(`sections.${index}.title`)}
+//       // {...register('title')}
+//       className="bg-zinc-900 border-zinc-700 text-white placeholder:text-zinc-500 h-12"
+//     />
+//   </div>
