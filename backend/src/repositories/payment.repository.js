@@ -71,7 +71,7 @@ export const updateOrderByRazorpayOrderIdRepo = async (
   razorpayOrderId,
   payload,
 ) => {
-  return await Order.findOneAndUpdate({ razorpayOrderId }, payload, {
+  return await paymentModel.findOneAndUpdate({ razorpayOrderId }, payload, {
     new: true,
   });
 };

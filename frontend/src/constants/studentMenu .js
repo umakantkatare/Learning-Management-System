@@ -1,16 +1,16 @@
-import { Home, BookOpen, PlusCircle, Users, Shield } from "lucide-react";
+import { Home, BookOpen, PlusCircle, Users, Shield, User } from "lucide-react";
 
 export const menuByRole = {
   student: [
     {
-      name: "Dashboard",
-      icon: Home,
-      path: "/dashboard",
+      name: "Profile",
+      icon: User,
+      path: "/profile",
     },
     {
       name: "My Courses",
       icon: BookOpen,
-      path: "/my-courses",
+      path: "/enroll-courses",
     },
   ],
 

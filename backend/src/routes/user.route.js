@@ -29,3 +29,4 @@ router.delete("/account", isAuthenticated, deleteAccount);
 router.get("/dashboard", isAuthenticated, getDashboard);
 
 export default router;
+

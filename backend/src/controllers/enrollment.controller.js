@@ -14,7 +14,7 @@ export const createEnrollment = asyncHandler(async (req, res) => {
   const enrollment = await createEnrollmentService(
     req.user._id,
     req.params.courseId,
-    req.body.orderId || null,
+    req.body?.orderId || null,
   );
 
   res.status(201).json({

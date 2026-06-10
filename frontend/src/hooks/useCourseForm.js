@@ -146,7 +146,8 @@ export default function useCourseForm() {
       if (courseId) {
         reset();
         setThumbnailPreview("");
-        navigate(`/create-course/sections/${courseId}`);
+        // navigate(`/create-course/sections/${courseId}`);
+        navigate(`/instructor/managecourse/${courseId}`);
       }
 
     } catch (error) {

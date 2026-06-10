@@ -1,6 +1,6 @@
 import crypto from "crypto";
 import Razorpay from "razorpay";
-import ApiError from './../utils/error.util.js';
+import ApiError from "./../utils/error.util.js";
 
 import { getCourseByIdRepo } from "../repositories/course.repository.js";
 import {
@@ -13,38 +13,32 @@ import {
 import {
   getEnrollmentRepo,
   createEnrollmentRepo,
+  addEnrolledCourseRepo,
 } from "../repositories/enrollment.repository.js";
 import { razorpay } from "../configs/payment.config.js";
-
-// const razorpay = new Razorpay({
-//   key_id: process.env.RAZORPAY_KEY_ID,
-//   key_secret: process.env.RAZORPAY_KEY_SECRET,
-// });
+import logger from './../utils/logger.util.js';
 
 /**
  * Create Razorpay Order
  */
 export const createPaymentOrderService = async (userId, courseId) => {
-  // already enrolled
   const enrolled = await getEnrollmentRepo(userId, courseId);
-
+  console.log("userId:", userId);
+  console.log("courseId:", courseId);
   if (enrolled) {
     throw new ApiError("You are already enrolled in this course", 400);
   }
 
-  // course exists
   const course = await getCourseByIdRepo(courseId);
 
   if (!course) {
     throw new ApiError("Course not found", 404);
   }
 
-  // free course
   if (course.isFree || course.price === 0) {
     throw new ApiError("This is a free course. Payment not required", 400);
   }
 
-  // prevent duplicate active order
   const pendingOrder = await getPendingOrderRepo(userId, courseId);
 
   if (pendingOrder) {
@@ -83,7 +77,10 @@ export const createPaymentOrderService = async (userId, courseId) => {
 /**
  * Verify Payment + Enroll
  */
+
 export const verifyPaymentService = async (payload, userId) => {
+  logger.info("=== PAYMENT VERIFICATION STARTED ===");
+
   const { razorpay_order_id, razorpay_payment_id, razorpay_signature } =
     payload;
 
@@ -91,7 +88,6 @@ export const verifyPaymentService = async (payload, userId) => {
     throw new ApiError("Payment verification data missing", 400);
   }
 
-  // already processed?
   const paidByPaymentId = await getOrderByPaymentIdRepo(razorpay_payment_id);
 
   if (paidByPaymentId) {
@@ -112,12 +108,11 @@ export const verifyPaymentService = async (payload, userId) => {
     return order;
   }
 
-  // signature verify
   const body = `${razorpay_order_id}|${razorpay_payment_id}`;
 
   const expectedSignature = crypto
     .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET)
-    .update(body.toString())
+    .update(body)
     .digest("hex");
 
   if (expectedSignature !== razorpay_signature) {
@@ -129,7 +124,6 @@ export const verifyPaymentService = async (payload, userId) => {
     throw new ApiError("Payment verification failed", 400);
   }
 
-  // mark paid
   const updatedOrder = await updateOrderByRazorpayOrderIdRepo(
     razorpay_order_id,
     {
@@ -140,7 +134,10 @@ export const verifyPaymentService = async (payload, userId) => {
     },
   );
 
-  // create enrollment (safe duplicate check)
+  if (!updatedOrder) {
+    throw new ApiError("Failed to update payment order", 500);
+  }
+
   const enrolled = await getEnrollmentRepo(userId, order.course);
 
   if (!enrolled) {
@@ -149,141 +146,11 @@ export const verifyPaymentService = async (payload, userId) => {
       course: order.course,
       order: updatedOrder._id,
     });
+
+    await addEnrolledCourseRepo(userId, order.course);
   }
+
+  logger.info("=== PAYMENT VERIFICATION COMPLETED ===");
 
   return updatedOrder;
 };
-
-// import { razorpay } from "../configs/payment.config.js";
-// import {
-//   createPayment,
-//   getAllPayments,
-//   updatePayment,
-// } from "../repositories/payment.repository.js";
-// import crypto from "crypto";
-// import logger from "../utils/logger.util.js";
-// import ApiError from "../utils/error.util.js";
-
-// const createOrderService = async (userId) => {
-//   try {
-//     logger.info("createOrderService called", { userId });
-
-//     const options = {
-//       amount: 49999,
-//       currency: "INR", // ✅ fixed typo
-//       receipt: `receipt_${Date.now()}`,
-//     };
-
-//     logger.info("Creating Razorpay order", { options });
-
-//     const order = await razorpay.orders.create(options);
-
-//     logger.info("Razorpay order created", {
-//       orderId: order.id,
-//       amount: order.amount,
-//     });
-
-//     await createPayment({
-//       user: userId,
-//       orderId: order.id,
-//       amount: order.amount,
-//       status: "created",
-//     });
-
-//     logger.info("Payment record created in DB", {
-//       userId,
-//       orderId: order.id,
-//     });
-
-//     return order;
-//   } catch (error) {
-//     logger.error("Error in createOrderService", {
-//       message: error.message,
-//       stack: error.stack,
-//       userId,
-//     });
-
-//     throw error;
-//   }
-// };
-
-// const verifyPaymentService = async (data) => {
-//   try {
-//     logger.info("verifyPaymentService called", {
-//       razorpay_order_id: data.razorpay_order_id,
-//     });
-
-//     const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = data;
-
-//     if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {
-//       logger.warn("Missing payment verification fields", data);
-//       throw new ApiError("Invalid payment data", 400);
-//     }
-
-//     const body = razorpay_order_id + "|" + razorpay_payment_id;
-
-//     const expectedSignature = crypto
-//       .createHmac("sha256", process.env.RAZORPAY_SECRET)
-//       .update(body)
-//       .digest("hex");
-//       console.log(expectedSignature, 'expectedsignature');
-
-//     logger.info("Generated signature for verification", {
-//       razorpay_order_id,
-//     });
-
-//     if (expectedSignature !== razorpay_signature) {
-//       logger.warn("Invalid payment signature", {
-//         razorpay_order_id,
-//         razorpay_payment_id,
-//       });
-//       throw new ApiError("Invalid signature", 400);
-//     }
-
-//     logger.info("Payment signature verified", {
-//       razorpay_order_id,
-//     });
-
-//     const payment = await updatePayment(razorpay_order_id, {
-//       paymentId: razorpay_payment_id,
-//       signature: razorpay_signature,
-//       status: "success",
-//     });
-
-//     logger.info("Payment updated successfully", {
-//       orderId: razorpay_order_id,
-//       paymentId: razorpay_payment_id,
-//     });
-
-//     return payment;
-//   } catch (error) {
-//     logger.error("Error in verifyPaymentService", {
-//       message: error.message,
-//       stack: error.stack,
-//       razorpay_order_id: data?.razorpay_order_id,
-//     });
-
-//     throw error;
-//   }
-// };
-
-// const getPaymentsService = async () => {
-//   try {
-//     logger.info("getPaymentsService called");
-
-//     const payments = await getAllPayments();
-
-//     logger.info("Payments fetched successfully", {
-//       count: payments.length,
-//     });
-
-//     return payments;
-//   } catch (error) {
-//     logger.error("Error in getPaymentsService", {
-//       message: error.message,
-//       stack: error.stack,
-//     });
-
-//     throw error;
-//   }
-// };

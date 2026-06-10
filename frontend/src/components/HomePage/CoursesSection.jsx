@@ -1,29 +1,24 @@
 // CoursesSection.jsx
+import { getPublishedCoursesThunk } from "@/features/course/courseThunk";
 import { ArrowRight, Clock3, Star } from "lucide-react";
+import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 export default function CoursesSection() {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const courses = [
-    {
-      title: "Full Stack Web Development",
-      level: "Beginner to Advanced",
-      duration: "6 Months",
-      rating: "4.9",
-    },
-    {
-      title: "MERN Stack Bootcamp",
-      level: "Intermediate",
-      duration: "4 Months",
-      rating: "4.8",
-    },
-    {
-      title: "DSA + Interview Prep",
-      level: "All Levels",
-      duration: "3 Months",
-      rating: "4.9",
-    },
-  ];
+  const [courseList, setCourseList] = useState([]);
+  useEffect(() => {
+    (async () => {
+      const response = await dispatch(getPublishedCoursesThunk());
+      console.log("response", response);
+      if (response?.payload?.success) {
+        setCourseList(response.payload.data);
+      }
+    })();
+  }, [dispatch]);
+  console.log("course List:", courseList);
 
   function goToCourse() {
     navigate("/courses");
@@ -45,29 +40,43 @@ export default function CoursesSection() {
         </div>
 
         <div className="mt-12 grid md:grid-cols-2 xl:grid-cols-3 gap-6">
-          {courses.map((course, i) => (
+          {courseList.slice(0, 4).map((course) => (
             <div
-              key={i}
+              key={course._id}
               className="rounded-3xl border border-zinc-800 bg-zinc-900/60 p-6 hover:border-orange-500/40 transition"
             >
+              <img
+                src={course.thumbnail?.url}
+                alt={course.title}
+                className="w-full h-48 object-cover rounded-xl mb-4"
+              />
+
               <span className="text-xs text-orange-400">{course.level}</span>
 
-              <h3 className="mt-3 text-xl font-semibold">{course.title}</h3>
+              <h3 className="mt-3 text-xl font-semibold line-clamp-2 min-h-14">
+                {course.title}
+              </h3>
+
+              <p className="mt-2 text-sm text-zinc-400 min-h-10">
+                {course.subtitle?.length > 40
+                  ? `${course.subtitle.substring(0, 40)}...`
+                  : course.subtitle}
+              </p>
 
               <div className="mt-5 flex items-center justify-between text-sm text-zinc-400">
                 <span className="flex items-center gap-2">
                   <Clock3 size={16} />
-                  {course.duration}
+                  {course.totalDuration || 0} hrs
                 </span>
 
                 <span className="flex items-center gap-1">
                   <Star size={16} className="fill-orange-500 text-orange-500" />
-                  {course.rating}
+                  {course.rating || 0}
                 </span>
               </div>
 
               <button className="mt-6 w-full rounded-xl bg-orange-500 hover:bg-orange-600 px-5 py-3 text-sm font-medium transition">
-                Enroll Now
+                {course.isFree ? "Enroll Free" : `₹${course.discountPrice}`}
               </button>
             </div>
           ))}

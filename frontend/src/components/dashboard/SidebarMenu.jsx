@@ -4,12 +4,15 @@ import { menuByRole } from "@/constants/studentMenu ";
 import { useDispatch } from "react-redux";
 import { logoutThunk } from "@/features/auth/authThunk";
 import useAuth from "@/hooks/useAuth";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 
 export default function SidebarMenu() {
   const dispatch = useDispatch();
+  const navigate = useNavigate()
   async function onLogout() {
     await dispatch(logoutThunk());
+    navigate('/')
+
   }
 
   const { user } = useAuth();

@@ -2,6 +2,7 @@ import { Badge } from "@/components/ui/badge";
 import { Star, Users, Clock3, Globe } from "lucide-react";
 
 export default function CourseHero({ course }) {
+  console.log('instructor name:',course?.instructor?.name);
   console.log('course hero:', course);
   return (
     <section className="bg-slate-950 text-white">

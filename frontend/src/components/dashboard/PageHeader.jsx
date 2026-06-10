@@ -2,12 +2,27 @@ import { Lock, Pencil } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useDispatch } from "react-redux";
 import { changePasswordThunk } from "@/features/auth/authThunk";
+import { useNavigate } from "react-router-dom";
 
 export default function PageHeader() {
-  const dispatch = useDispatch();
-  async function changePassword() {
-    await dispatch(changePasswordThunk());
+  const navigate = useNavigate()
+   function changePassword() {
+    console.log("Change password button clicked!"); // Check karein ye console me aa raha hai ya nahi
+    try {
+      navigate(`/change-password`)
+    } catch (error) {
+      console.error("Error in thunk:", error);
+    }
   }
+
+  function handleEditProfile() {
+    console.log("Edit profile button clicked!");
+    // Yahan apni logic dalein, jaise modal open karna
+  }
+
+  // async function changePassword() {
+  //   await dispatch(changePasswordThunk());
+  // }
   return (
     <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
       <div>
@@ -19,7 +34,10 @@ export default function PageHeader() {
       </div>
 
       <div className="flex gap-3">
-        <Button className="bg-orange-600 hover:bg-orange-700 cursor-pointer">
+        <Button
+          onClick={() => handleEditProfile()}
+          className="bg-orange-600 hover:bg-orange-700 cursor-pointer"
+        >
           <Pencil className="w-4 h-4 mr-2" />
           Edit Profile
         </Button>

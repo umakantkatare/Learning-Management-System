@@ -1,9 +1,8 @@
 import { User, MapPin } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 
-import InfoItem from "./InfoItem";
 
-export default function InfoSectionCard({ title, data, columns, type, bio }) {
+export default function InfoSectionCard({ title, data, type, bio }) {
   const Icon = type === "contact" ? User : MapPin;
 
   return (
@@ -13,14 +12,6 @@ export default function InfoSectionCard({ title, data, columns, type, bio }) {
           <Icon className="text-orange-500" />
           <h2 className="text-xl font-semibold">{title}</h2>
         </div>
-
-        {/* <div
-          className={`grid md:grid-cols-2 ${columns} gap-5`}
-        >
-          {Object.entries(data || {}).map((item, i) => (
-            <InfoItem key={i} item={item} />
-          ))}
-        </div> */}
 
         <div className="grid md:grid-cols-2 gap-5">
           <div className="space-y-2">
