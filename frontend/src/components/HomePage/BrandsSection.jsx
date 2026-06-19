@@ -1,4 +1,3 @@
-// BrandsSection.jsx
 export default function BrandsSection() {
   const brands = ["Google", "Microsoft", "Amazon", "Meta", "Netflix", "Adobe"];
 

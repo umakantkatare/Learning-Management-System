@@ -1,5 +1,3 @@
-// src/utils/jwt.js
-
 import jwt from "jsonwebtoken";
 import ErrorHandler from "./errorHandler.util.js";
 
@@ -18,11 +16,14 @@ export const generateAccessToken = (userId) => {
  * Long Expiry
  */
 export const generateRefreshToken = (userId) => {
-  const generateRefreshTokens = jwt.sign({ id: userId }, process.env.JWT_REFRESH_SECRET, {
-    expiresIn: process.env.JWT_REFRESH_EXPIRE || "7d",
-  });
-  console.log('generateRefreshTokens:', generateRefreshTokens);
-  return generateRefreshTokens
+  const generateRefreshTokens = jwt.sign(
+    { id: userId },
+    process.env.JWT_REFRESH_SECRET,
+    {
+      expiresIn: process.env.JWT_REFRESH_EXPIRE || "7d",
+    },
+  );
+  return generateRefreshTokens;
 };
 
 /**
@@ -40,14 +41,10 @@ export const verifyAccessToken = (token) => {
  * Verify Refresh Token
  */
 export const verifyRefreshToken = (token) => {
-  console.log("verify token:", token);
   try {
-    console.log('hello from verify refresh token');
     const verifiedToken = jwt.verify(token, process.env.JWT_REFRESH_SECRET);
-    console.log("verified token:", verifiedToken);
     return verifiedToken;
   } catch (error) {
-     console.log("JWT VERIFY ERROR:", error.message);
     throw new ErrorHandler("Invalid refresh token", 401);
   }
 };

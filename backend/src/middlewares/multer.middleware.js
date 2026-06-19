@@ -11,7 +11,6 @@ const allowedMimeTypes = [
   "video/x-matroska", // .mkv
   "video/webm",
 ];
-// const uploadDir = path.join (process.cwd(), 'src', 'uploads')
 
 const storage = multer.memoryStorage();
 

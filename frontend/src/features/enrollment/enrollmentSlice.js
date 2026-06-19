@@ -1,7 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import {
   createEnrollmentThunk,
-  getMyEnrollmentsThunk,
 } from "./enrollmentThunk";
 
 const initialState = {
@@ -44,23 +43,6 @@ const enrollmentSlice = createSlice({
         state.enrollmentLoading = false;
         state.error = action.payload;
       })
-
-      // Get My Enrollments
-      .addCase(getMyEnrollmentsThunk.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(getMyEnrollmentsThunk.fulfilled, (state, action) => {
-        state.loading = false;
-
-        // Adjust according to your API response
-        state.enrollments =
-          action.payload?.enrollments || action.payload?.data || [];
-      })
-      .addCase(getMyEnrollmentsThunk.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
-      });
   },
 });
 

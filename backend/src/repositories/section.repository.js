@@ -1,5 +1,3 @@
-// repositories/section.repo.js
-
 import sectionModel from "../models/nosql/section.model.js";
 import lectureModel from './../models/nosql/lecture.model.js';
 

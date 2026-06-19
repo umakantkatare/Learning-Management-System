@@ -1,6 +1,3 @@
-// services/admin.service.js
-
-
 import {
   getDashboardStatsRepo,
   getAllUsersRepo,

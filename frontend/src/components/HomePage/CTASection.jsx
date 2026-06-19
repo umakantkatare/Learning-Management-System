@@ -1,4 +1,3 @@
-// CTASection.jsx
 import { ArrowRight } from "lucide-react";
 
 export default function CTASection() {

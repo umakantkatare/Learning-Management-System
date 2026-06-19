@@ -6,8 +6,6 @@ import { verifyAccessToken } from "../utils/jwt.util.js";
 import { findUserByIdRepo } from "../repositories/user.repository.js";
 import ErrorHandler from "../utils/errorHandler.util.js";
 
-
-
 export const isAuthenticated = asyncHandler(async (req, res, next) => {
   let token = null;
 

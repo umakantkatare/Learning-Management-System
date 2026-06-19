@@ -1,18 +1,12 @@
-// routes/upload.routes.js
-
 import express from "express";
-
-// import {
-//   uploadImage,
-//   signVideoUpload,
-//   deleteFile,
-// } from "../controllers/upload.controller.js";
-
 import { isAuthenticated } from "../middlewares/auth.middleware.js";
 import { authorizeRoles } from "../middlewares/role.middleware.js";
 import { upload } from "../middlewares/multer.middleware.js";
-import { deleteFile, signVideoUpload, uploadImage } from "../controllers/upload.controller.js";
-
+import {
+  deleteFile,
+  signVideoUpload,
+  uploadImage,
+} from "../controllers/upload.controller.js";
 
 const router = express.Router();
 

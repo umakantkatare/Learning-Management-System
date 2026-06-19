@@ -1,5 +1,3 @@
-// src/utils/sendToken.js
-
 import cookieOptions from "../configs/cookie.config.js";
 
 const sendToken = (res, accessToken, refreshToken) => {

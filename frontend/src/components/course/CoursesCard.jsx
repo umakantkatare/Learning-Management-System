@@ -4,7 +4,8 @@ import { useNavigate } from "react-router-dom";
 
 export default function CoursesCard({ course }) {
   const navigate = useNavigate();
-    const handleNavigate = () => {
+
+  const handleNavigate = () => {
     navigate(`/course/${course.slug}`);
   };
   return (
@@ -29,7 +30,9 @@ export default function CoursesCard({ course }) {
 
       {/* content */}
       <div className="p-5">
-        <p className="text-sm text-orange-400 font-medium">{course?.category}</p>
+        <p className="text-sm text-orange-400 font-medium">
+          {course?.category}
+        </p>
 
         <h3 className="mt-2 text-xl font-semibold leading-snug line-clamp-2 min-h-[56px]">
           {course?.title}

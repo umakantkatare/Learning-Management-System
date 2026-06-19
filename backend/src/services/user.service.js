@@ -1,5 +1,3 @@
-// src/services/user.service.js
-
 import {
   findUserByIdRepo,
   updateUserByIdRepo,
@@ -74,13 +72,11 @@ export const updateAvatarService = async (userId, file) => {
         oldAvatar: user.avatar.secure_url,
       });
       try {
-        
         await deleteFromImageKit(user.avatar.secure_url);
         logger.info("Old avatar deleted successfully", { userId });
       } catch (error) {
-         logger.error("Old avatar delete failed", error);
+        logger.error("Old avatar delete failed", error);
       }
-
     }
 
     const updated = await updateUserByIdRepo(userId, {
@@ -103,32 +99,6 @@ export const updateAvatarService = async (userId, file) => {
     throw error;
   }
 };
-// export const updateAvatarService = async (userId, file) => {
-//   if (!file) {
-//     throw new ErrorHandler("Avatar file required", 400);
-//   }
-
-//   const user = await findUserByIdRepo(userId);
-
-//   if (!user) {
-//     throw new ErrorHandler("User not found", 404);
-//   }
-
-//   const uploaded = await uploadToImageKit(file, "/lms/users/avatar");
-
-//   if (user.avatar?.secure_url) {
-//     await deleteFromImageKit(user.avatar?.secure_url);
-//   }
-
-//   const updated = await updateUserByIdRepo(userId, {
-//     avatar: {
-//       public_id: uploaded.public_id,
-//       secure_url: uploaded.secure_url,
-//     },
-//   });
-
-//   return updated;
-// };
 
 /**
  * Delete Account

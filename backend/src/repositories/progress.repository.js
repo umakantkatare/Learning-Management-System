@@ -1,4 +1,3 @@
-// repositories/progress.repo.js
 import progressModel from "./../models/nosql/progress.model.js";
 
 /**

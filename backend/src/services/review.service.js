@@ -1,5 +1,3 @@
-// services/review.service.js
-
 import {
   createReviewRepo,
   getReviewByIdRepo,

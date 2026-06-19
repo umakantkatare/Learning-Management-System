@@ -1,6 +1,3 @@
-// services/progress.service.js
-
-
 import {
   createProgressRepo,
   getProgressRepo,

@@ -1,5 +1,3 @@
-// repositories/review.repo.js
-
 import reviewModel from "../models/nosql/review.model.js";
 
 /**

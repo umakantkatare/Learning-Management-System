@@ -1,4 +1,3 @@
-// CoursesSection.jsx
 import { getPublishedCoursesThunk } from "@/features/course/courseThunk";
 import { ArrowRight, Clock3, Star } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -12,18 +11,18 @@ export default function CoursesSection() {
   useEffect(() => {
     (async () => {
       const response = await dispatch(getPublishedCoursesThunk());
-      console.log("response", response);
       if (response?.payload?.success) {
         setCourseList(response.payload.data);
       }
     })();
   }, [dispatch]);
-  console.log("course List:", courseList);
 
   function goToCourse() {
     navigate("/courses");
   }
-
+  const handleNavigate = (slug) => {
+    navigate(`/course/${slug}`);
+  };
   return (
     <section className="bg-black text-white">
       <div className="max-w-7xl mx-auto px-4 lg:px-8 py-16">
@@ -75,8 +74,11 @@ export default function CoursesSection() {
                 </span>
               </div>
 
-              <button className="mt-6 w-full rounded-xl bg-orange-500 hover:bg-orange-600 px-5 py-3 text-sm font-medium transition">
-                {course.isFree ? "Enroll Free" : `₹${course.discountPrice}`}
+              <button
+                onClick={() => handleNavigate(course.slug)}
+                className="mt-6 w-full rounded-xl bg-orange-500 hover:bg-orange-600 px-5 py-3 text-sm font-medium transition"
+              >
+                course details
               </button>
             </div>
           ))}

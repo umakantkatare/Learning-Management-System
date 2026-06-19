@@ -1,4 +1,3 @@
-// src/repositories/auth.repository.js
 import userModel from "./../models/nosql/user.model.js";
 
 /**

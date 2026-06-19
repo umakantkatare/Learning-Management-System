@@ -4,6 +4,7 @@ import { Menu, X, User } from "lucide-react";
 import useAuth from "@/hooks/useAuth";
 import { useDispatch } from "react-redux";
 import { profileThunk } from "@/features/auth/authThunk";
+import navLinks from "@/constants/navbar";
 
 export default function Navbar() {
   const dispatch = useDispatch();
@@ -20,13 +21,7 @@ export default function Navbar() {
     };
 
     fetchProfile();
-  }, [dispatch]);
-  const navLinks = [
-    { name: "Home", path: "/" },
-    { name: "Courses", path: "/courses" },
-    { name: "Bootcamp", path: "/bootcamp" },
-    { name: "Contact", path: "/contact" },
-  ];
+  }, []);
 
   return (
     <header className="sticky top-0 left-0 w-full z-50 px-4 md:px-8 py-6 bg-black">
@@ -107,11 +102,11 @@ export default function Navbar() {
           ))}
 
           <Link
-            to="/login"
+            to={user ? "/profile" : "/login"}
             onClick={() => setOpen(false)}
             className="block px-4 py-3 rounded-xl text-white bg-orange-500/20 border border-orange-400/20"
           >
-            Sign In
+            {user ? "Profile" : "Sign In"}
           </Link>
         </div>
       </div>

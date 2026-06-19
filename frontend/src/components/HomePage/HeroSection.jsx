@@ -1,16 +1,13 @@
-// HeroSection.jsx
 import { ArrowRight, PlayCircle, Star } from "lucide-react";
 
 export default function HeroSection() {
   return (
     <section className="relative overflow-hidden bg-black text-white py-15">
-      {/* Background Glow */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,#ea580c22,transparent_45%)]" />
       <div className="absolute -top-20 left-1/2 h-72 w-72 -translate-x-1/2 rounded-full bg-orange-500/20 blur-3xl" />
       <div className="absolute bottom-0 right-0 h-64 w-64 rounded-full bg-orange-600/10 blur-3xl" />
 
       <div className="relative max-w-7xl mx-auto px-4 lg:px-8 pt-16 md:pt-24 pb-14 md:pb-20">
-        {/* Badge */}
         <div className="flex justify-center">
           <span className="inline-flex items-center gap-2 rounded-full border border-orange-500/30 bg-orange-500/10 px-4 py-1.5 text-xs md:text-sm text-orange-300">
             <Star size={14} className="fill-orange-400 text-orange-400" />
@@ -18,7 +15,6 @@ export default function HeroSection() {
           </span>
         </div>
 
-        {/* Heading */}
         <div className="mx-auto mt-6 max-w-4xl text-center">
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold leading-tight tracking-tight">
             Become The Software Engineer
@@ -33,7 +29,6 @@ export default function HeroSection() {
           </p>
         </div>
 
-        {/* Buttons */}
         <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
           <button className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-xl bg-orange-500 hover:bg-orange-600 px-6 py-3 text-sm md:text-base font-medium transition">
             Start Learning

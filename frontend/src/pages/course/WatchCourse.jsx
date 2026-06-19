@@ -21,7 +21,6 @@ export default function WatchCourse() {
       try {
         setLoading(true);
 
-        // Call your actual backend API
         const res = await getCourseById(id);
         console.log("watch lecture response:", res);
 

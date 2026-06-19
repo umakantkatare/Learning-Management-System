@@ -23,9 +23,8 @@ async function dbConnected() {
       stack: error.stack,
     });
 
-    process.exit(1); 
+    process.exit(1);
   }
 }
 
 export default dbConnected;
-

@@ -1,6 +1,4 @@
 import courseModel from "../models/nosql/course.model.js";
-// repositories/course.repo.js
-
 
 /**
  * Create Course

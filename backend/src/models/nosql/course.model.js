@@ -1,4 +1,3 @@
-// models/course.model.js
 import mongoose from "mongoose";
 import slugify from "slugify";
 const courseSchema = new mongoose.Schema(

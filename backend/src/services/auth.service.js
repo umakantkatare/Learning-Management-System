@@ -1,5 +1,3 @@
-// src/services/auth.service.js
-
 import bcrypt from "bcryptjs";
 import crypto from "crypto";
 
@@ -44,7 +42,7 @@ export const registerService = async (body, file) => {
     throw new ErrorHandler("User already exists", 409);
   }
 
-  const hashedPassword = await bcrypt.hash(password, 12);
+  const hashedPassword = await bcrypt.hash(password, 10);
 
   let uploadedFile = null;
 

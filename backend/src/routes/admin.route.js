@@ -1,5 +1,3 @@
-// routes/admin.routes.js
-
 import express from "express";
 
 import {

@@ -1,6 +1,3 @@
-// services/enrollment.service.js
-
-
 import {
   getEnrollmentRepo,
   getUserEnrollmentsRepo,
@@ -35,7 +32,6 @@ export const createEnrollmentService = async (
     throw new ApiError("Already enrolled in this course", 400);
   }
 
-  // if paid course then valid paid order required
   if (!course.isFree && course.price > 0) {
     if (!orderId) {
       throw new ApiError("Paid order required for enrollment", 400);

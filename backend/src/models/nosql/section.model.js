@@ -1,5 +1,3 @@
-// models/section.model.js
-
 import mongoose from "mongoose";
 
 const sectionSchema = new mongoose.Schema(

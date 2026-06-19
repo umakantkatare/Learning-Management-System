@@ -1,5 +1,3 @@
-// routes/order.routes.js
-
 import express from "express";
 
 import { getMyOrders, getOrderById } from "../controllers/order.controller.js";

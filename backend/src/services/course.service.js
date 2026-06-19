@@ -18,23 +18,19 @@ import logger from "../utils/logger.util.js";
  * Create Course
  */
 export const createCourseService = async (payload, userId, file) => {
-  // Trim strings
   Object.keys(payload).forEach((key) => {
     if (typeof payload[key] === "string") {
       payload[key] = payload[key].trim();
     }
   });
 
-  // Required fields
   if (!payload.title || !payload.description || !payload.category) {
     throw new ApiError("Title, description and category are required", 400);
   }
 
-  // Convert number
   payload.price = Number(payload.price || 0);
   payload.discountPrice = Number(payload.discountPrice || 0);
 
-  // Free course logic
   if (payload.price === 0) {
     payload.isFree = true;
   }
@@ -44,7 +40,6 @@ export const createCourseService = async (payload, userId, file) => {
   let uploadedFile = null;
 
   try {
-    // Upload thumbnail first
     if (file) {
       uploadedFile = await uploadToImageKit(file, "/lms/course/thumbnail");
 
@@ -67,7 +62,6 @@ export const createCourseService = async (payload, userId, file) => {
       hasFile: !!file,
     });
 
-    // rollback uploaded file
     if (uploadedFile?.fileId) {
       await deleteFromImageKit(uploadedFile.fileId);
     }

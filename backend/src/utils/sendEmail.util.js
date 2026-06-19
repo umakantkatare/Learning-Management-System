@@ -1,5 +1,3 @@
-// src/utils/sendEmail.js
-
 import nodemailer from "nodemailer";
 import ErrorHandler from "./errorHandler.util.js";
 
@@ -23,7 +21,6 @@ const sendEmail = async ({ to, subject, text, html }) => {
       html,
     });
   } catch (error) {
-    console.error("SMTP ERROR:", error);
     throw new ErrorHandler(error.message || "Email sending failed", 500);
   }
 };

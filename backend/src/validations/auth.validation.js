@@ -1,5 +1,3 @@
-// src/validations/auth.validation.js
-
 import Joi from "joi";
 
 /**
