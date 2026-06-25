@@ -2,6 +2,7 @@ import { lazy, Suspense } from "react";
 import { createBrowserRouter } from "react-router-dom";
 
 import ProtectedRoute from "./ProtectedRoute";
+import SkeletonUI from "@/components/layout/SkeletonUI";
 
 const Homepage = lazy(() => import("../pages/HomePage"));
 const Login = lazy(() => import("../pages/auth/Login"));
@@ -28,13 +29,7 @@ const MyCoursePage = lazy(() => import("../pages/instructor/MyCoursePage"));
 const Profile = lazy(() => import("../pages/dashboard/Profile"));
 
 const withSuspense = (Component) => (
-  <Suspense
-    fallback={
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-500"></div>
-      </div>
-    }
-  >
+  <Suspense fallback={<SkeletonUI />}>
     <Component />
   </Suspense>
 );

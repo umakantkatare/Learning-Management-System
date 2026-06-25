@@ -3,6 +3,7 @@ import { router } from "./routes/AppRoute";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState, useRef } from "react";
 import { refreshTokenThunk, profileThunk } from "./features/auth/authThunk";
+import SkeletonUI from "./components/layout/SkeletonUI";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -18,7 +19,6 @@ const App = () => {
       try {
         if (!user) {
           await dispatch(refreshTokenThunk()).unwrap();
-
           await dispatch(profileThunk()).unwrap();
         }
       } catch (error) {
@@ -31,17 +31,9 @@ const App = () => {
     initAuth();
   }, [dispatch, user]);
 
+  // 2. Initializing state par Shadcn Skeleton render karein
   if (initializing) {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-zinc-950 text-white">
-        <div className="flex flex-col items-center gap-3">
-          <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-orange-500"></div>
-          <p className="text-sm text-zinc-400 tracking-wide">
-            Initializing session...
-          </p>
-        </div>
-      </div>
-    );
+    return <SkeletonUI />;
   }
 
   return <RouterProvider router={router} />;
