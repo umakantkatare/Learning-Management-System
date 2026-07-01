@@ -1,10 +1,10 @@
 import { LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { menuByRole } from "@/constants/studentMenu ";
 import { useDispatch } from "react-redux";
 import { logoutThunk } from "@/features/auth/authThunk";
 import useAuth from "@/hooks/useAuth";
 import { NavLink, useNavigate } from "react-router-dom";
+import { menuByRole } from "@/constants/studentMenu";
 
 export default function SidebarMenu() {
   const dispatch = useDispatch();
